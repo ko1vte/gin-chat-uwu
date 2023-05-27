@@ -9,3 +9,4 @@ type User struct {
 	CreatedAt mysql.NullTime `json:"created_at"`
 	Name      string         `json:"name"`
 }
+
