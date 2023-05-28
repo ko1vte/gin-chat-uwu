@@ -3,7 +3,7 @@ mysql:
   password: Su15vte214!
   host: 47.112.112.240
   port: 3306
-  database: gin_chat_uwu
+  database: go_chat_uwu
 redis:
   host: 47.112.112.240
   port: 6379

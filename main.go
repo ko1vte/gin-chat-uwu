@@ -1,5 +1,10 @@
 package main
 
+import (
+	"gin-chat-uwu/database"
+)
+
 func main() {
-	initsql.InitMysqlDB()
+	database.InitMysqlDB()
+	database.InitRedisdb()
 }

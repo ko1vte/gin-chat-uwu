@@ -23,7 +23,5 @@ func Run(desination string, serviceName string) {
 }
 
 func RegisterHandler() {
-	return func(c *gin.Context) {
 
-	}
 }
