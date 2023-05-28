@@ -1,10 +1,10 @@
 package main
 
 import (
-	"gin-chat-uwu/database"
+	"gin-chat-uwu/router"
 )
 
 func main() {
-	database.InitMysqlDB()
-	database.InitRedisdb()
+	r := router.InitRouter()
+	r.Run()
 }
