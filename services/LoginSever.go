@@ -3,6 +3,7 @@ package services
 import (
 	"gin-chat-uwu/dao"
 	"gin-chat-uwu/global"
+	"gin-chat-uwu/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,10 +30,18 @@ func Login(ctx *gin.Context) {
 			"message": "登陆失败，帐号或密码错误",
 		})
 	} else {
+		token, err := middlewares.GetToken(username)
+		if err != nil {
+			ctx.JSON(500, gin.H{
+				"code":    "-1",
+				"message": "服务器发生错误，无法生成token",
+			})
+		}
 		ctx.JSON(200, gin.H{
 			"code":     1,
 			"message":  "登陆成功",
 			"username": username,
+			"token":    token,
 		})
 	}
 }

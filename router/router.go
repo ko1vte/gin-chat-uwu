@@ -1,6 +1,7 @@
 package router
 
 import (
+	"gin-chat-uwu/middlewares"
 	"gin-chat-uwu/services"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,12 @@ import (
 func InitRouter() *gin.Engine {
 	router := gin.Default()
 	router.POST("/login", services.Login)
-	router.POST("/register", services.Register)
+	user := router.Group("user")
+	{
+		user.GET("/login", middlewares.JWY(), services.Login)
+		user.POST("/register", middlewares.JWY(), services.Register)
+	}
+
 	return router
+
 }
