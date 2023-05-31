@@ -1,16 +1,16 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
 	"gin-chat-uwu/models"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"golang.org/x/net/websocket"
 )
 
-func wsChat(w http.ResponseWriter, r *http.Request) {
+func Chat(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	username := query.Get("username")
 	var isvalida = true
@@ -18,7 +18,7 @@ func wsChat(w http.ResponseWriter, r *http.Request) {
 		CheckOrigin: func(r *http.Request) bool {
 			return isvalida
 		},
-	}).Upgrader(w, r, nil)
+	}).Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -34,18 +34,47 @@ func wsChat(w http.ResponseWriter, r *http.Request) {
 	models.ClientMap[username] = node
 	models.RwLocker.Unlock()
 
-	go sendMessage(node)
+	go SendMessage(node)
+	go reccMessage(node)
 
 }
 
-func sendMessage(node *models.Node) {
+func SendMessage(node *models.Node) {
 	for {
 		select {
 		case data := <-node.Data:
-			_, err := node.Conn.Write(websocket.TextMessage, data)
+			err := node.Conn.WriteMessage(websocket.TextMessage, data)
 			if err != nil {
 				log.Println("写入消息失败", err)
 			}
 		}
 	}
 }
+
+func reccMessage(node *models.Node) {
+	for {
+		_, data, err := node.Conn.ReadMessage()
+		if err != nil {
+			log.Println("读取消息失败", err)
+			return
+		}
+		msg := models.Message{}
+		err = json.Unmarshal(data, &msg)
+		if err != nil {
+			log.Println("json解析失败", err)
+			return
+		}
+		tarnode, ok := models.ClientMap[msg.Username]
+		if !ok {
+			log.Println("没有node", msg.Username)
+			return
+		}
+		tarnode.Data <- data
+		log.Println("发送成功", string(data))
+	}
+}
+
+// {"Username" :"su15vte",
+// "Name" :"su15vte",
+// "CreateAt" :"2002-10-15",
+// "Data":     "Hello World"}

@@ -4,14 +4,14 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/net/websocket"
+	"github.com/gorilla/websocket"
 )
 
 type Message struct {
-	Username string
-	Name     string
-	CreateAt time.Time
-	Data     string
+	Username string    `json:"username"`
+	Name     string    `json:"name"`
+	CreateAt time.Time `json:"time"`
+	Data     string    `json:"data"`
 }
 
 func (m *Message) MsgTableName() string {

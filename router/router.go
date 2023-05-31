@@ -7,6 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func Chat(ctx *gin.Context) {
+	services.Chat(ctx.Writer, ctx.Request)
+}
 func InitRouter() *gin.Engine {
 	router := gin.Default()
 	router.POST("/login", services.Login)
@@ -14,6 +17,7 @@ func InitRouter() *gin.Engine {
 	{
 		user.GET("/login", middlewares.JWY(), services.Login)
 		user.POST("/register", middlewares.JWY(), services.Register)
+		user.GET("/chat", Chat)
 	}
 
 	return router
