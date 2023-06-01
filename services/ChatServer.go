@@ -52,22 +52,23 @@ func SendMessage(node *models.Node) {
 }
 
 func reccMessage(node *models.Node) {
+reconve:
 	for {
 		_, data, err := node.Conn.ReadMessage()
 		if err != nil {
 			log.Println("读取消息失败", err)
-			return
+			goto reconve
 		}
 		msg := models.Message{}
 		err = json.Unmarshal(data, &msg)
 		if err != nil {
 			log.Println("json解析失败", err)
-			return
+			goto reconve
 		}
 		tarnode, ok := models.ClientMap[msg.Username]
 		if !ok {
 			log.Println("没有node", msg.Username)
-			return
+			goto reconve
 		}
 		tarnode.Data <- data
 		log.Println("发送成功", string(data))
