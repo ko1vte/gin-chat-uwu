@@ -12,11 +12,10 @@ func Chat(ctx *gin.Context) {
 }
 func InitRouter() *gin.Engine {
 	router := gin.Default()
-	router.POST("/login", services.Login)
+	router.GET("/login", services.Login)
+	router.POST("/register", services.Register)
 	user := router.Group("user")
 	{
-		user.GET("/login", middlewares.JWY(), services.Login)
-		user.POST("/register", middlewares.JWY(), services.Register)
 		user.GET("/chat", Chat)
 		user.GET("/dele", middlewares.JWY(), services.DeleUser)
 	}

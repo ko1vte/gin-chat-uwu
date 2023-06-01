@@ -64,7 +64,7 @@ func DeleUser(username string) error {
 	if err != nil {
 		return err
 	}
-	deleStr := "DELETE FROM users WHERE usename = ?"
+	deleStr := "DELETE FROM users WHERE Username = ?"
 	stmt, err := db.Prepare(deleStr)
 	if err != nil {
 		return err
