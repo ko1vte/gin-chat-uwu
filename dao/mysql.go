@@ -50,11 +50,30 @@ func AddUser(user *models.User) error {
 	defer stmt.Close()
 
 	//执行预处理的语句
-	a, err := stmt.Exec(user.Username, user.Password, user.CreatedAt, user.Name)
-	log.Println(a)
+	result, err := stmt.Exec(user.Username, user.Password, user.CreatedAt, user.Name)
+	log.Println(result)
 	if err != nil {
 		return err
 	}
 	log.Printf("用户 %s 注册成功，注册时间：%s", user.Username, user.CreatedAt.Time)
+	return nil
+}
+
+func DeleUser(username string) error {
+	db, err := database.InitMysqlDB()
+	if err != nil {
+		return err
+	}
+	deleStr := "DELETE FROM users WHERE usename = ?"
+	stmt, err := db.Prepare(deleStr)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	result, err := stmt.Exec(username)
+	if err != nil {
+		return err
+	}
+	log.Println(result)
 	return nil
 }

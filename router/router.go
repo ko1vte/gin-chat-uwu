@@ -18,6 +18,7 @@ func InitRouter() *gin.Engine {
 		user.GET("/login", middlewares.JWY(), services.Login)
 		user.POST("/register", middlewares.JWY(), services.Register)
 		user.GET("/chat", Chat)
+		user.GET("/dele", middlewares.JWY(), services.DeleUser)
 	}
 
 	return router
