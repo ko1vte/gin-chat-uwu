@@ -83,7 +83,7 @@ func Updatename(name string, username string) error {
 	if err != nil {
 		return err
 	}
-	updateStr := "update userinfo set name=? where username=?"
+	updateStr := "update users set name=? where username=?"
 	stmt, err := db.Prepare(updateStr)
 	if err != nil {
 		return err

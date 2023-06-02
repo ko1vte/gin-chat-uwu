@@ -2,11 +2,12 @@ package services
 
 import (
 	"gin-chat-uwu/dao"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
-func update(ctx *gin.Context) {
+func Update(ctx *gin.Context) {
 	username := ctx.Query("username")
 	name := ctx.PostForm("name")
 	err := dao.Updatename(name, username)
@@ -14,6 +15,7 @@ func update(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
 			"message": "修改昵称失败",
 		})
+		log.Println(err)
 		return
 	}
 	ctx.JSON(200, gin.H{
