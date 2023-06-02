@@ -17,7 +17,7 @@ func InitRouter() *gin.Engine {
 	user := router.Group("user")
 	{
 		user.GET("/chat", Chat)
-		user.GET("/dele", middlewares.JWY(), services.DeleUser)
+		user.DELETE("/dele", middlewares.JWY(), services.DeleUser)
 	}
 
 	return router

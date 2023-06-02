@@ -77,3 +77,22 @@ func DeleUser(username string) error {
 	log.Println(result)
 	return nil
 }
+
+func Updatename(name string, username string) error {
+	db, err := database.InitMysqlDB()
+	if err != nil {
+		return err
+	}
+	updateStr := "update userinfo set name=? where username=?"
+	stmt, err := db.Prepare(updateStr)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	result, err := stmt.Exec(name, username)
+	if err != nil {
+		return err
+	}
+	log.Println(result)
+	return nil
+}
