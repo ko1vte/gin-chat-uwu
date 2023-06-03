@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"gin-chat-uwu/database"
+	"gin-chat-uwu/global"
 	"gin-chat-uwu/models"
 	"log"
 )
@@ -78,18 +79,18 @@ func DeleUser(username string) error {
 	return nil
 }
 
-func Updatename(name string, username string) error {
+func UpdatePwd(password string, username string) error {
 	db, err := database.InitMysqlDB()
 	if err != nil {
 		return err
 	}
-	updateStr := "update users set name=? where username=?"
+	updateStr := "update users set password=? where username=?"
 	stmt, err := db.Prepare(updateStr)
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
-	result, err := stmt.Exec(name, username)
+	result, err := stmt.Exec(global.Sha256Encode(password), username)
 	if err != nil {
 		return err
 	}

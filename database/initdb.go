@@ -52,7 +52,6 @@ func InitRedisdb() (*redis.Client, error) {
 	}
 	// 关闭 Redis 连接
 	log.Println("Redis connecting successful!")
-	client.Close()
 	return client, err
 }
 

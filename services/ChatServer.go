@@ -3,9 +3,11 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"gin-chat-uwu/dao"
 	"gin-chat-uwu/models"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -61,6 +63,8 @@ reconve:
 		}
 		msg := models.Message{}
 		err = json.Unmarshal(data, &msg)
+		log.Println(msg)
+		msg.Time = time.Now()
 		if err != nil {
 			log.Println("json解析失败", err)
 			goto reconve
@@ -71,7 +75,16 @@ reconve:
 			goto reconve
 		}
 		tarnode.Data <- data
-		log.Println("发送成功", string(data))
+		log.Println("发送成功", msg)
+		msgJSON, err := json.Marshal(msg)
+		if err != nil {
+			log.Println("数据存入Redis失败")
+			goto reconve
+		}
+		err = dao.SaveMsg(msgJSON)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }
 

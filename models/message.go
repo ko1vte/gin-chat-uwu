@@ -9,9 +9,8 @@ import (
 
 type Message struct {
 	Username string    `json:"username"`
-	Name     string    `json:"name"`
-	CreateAt time.Time `json:"time"`
-	Data     string    `json:"data"`
+	Msg      string    `json:"data"`
+	Time     time.Time `json:"time"`
 }
 
 func (m *Message) MsgTableName() string {
